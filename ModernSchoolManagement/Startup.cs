@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using ModernSchoolManagement.Authentication;
-using ModernSchoolManagement.Dam.Services;
 using Dapper;
+using ModernSchoolManagement.Dam.Repositories;
+using ModernSchoolManagement.Dam.Services;
 
 namespace ModernSchoolManagement
 {
@@ -12,7 +13,7 @@ namespace ModernSchoolManagement
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            _connectionString = Configuration.GetConnectionString("DefaultConnection");
+            _connectionString = Configuration.GetConnectionString("SqlConnection");
         }
         public IConfiguration Configuration { get; }
 
@@ -55,10 +56,13 @@ namespace ModernSchoolManagement
 
             //Add Services
             services.AddScoped<IAuthentication, Authentication.Authentication>();
+            services.AddScoped<IConnectionFactory, ConnectionFactory>();
+            services.AddScoped<IDynamicRepository, DynamicRepository>();
+            services.AddScoped<IUserModel, UserService>();
 
-            services.AddScoped<IUserInterface, UserService>();
-            
-            
+            //services.AddScoped<IUserInterface, UserService>();
+
+
             // Use AddControllers with minimal JSON config for performance
             services.AddControllers()
                 .AddJsonOptions(options =>
