@@ -1,25 +1,33 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using ModernSchoolManagement.Authentication;
-using ModernSchoolManagement.Dam.Services;
+//using ModernSchoolManagement.Dam.Services;
 using Dapper;
 
 namespace ModernSchoolManagement
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
         private readonly string? _connectionString;
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
             _connectionString = Configuration.GetConnectionString("DefaultConnection");
         }
-        public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
             // Use AddMemoryCache for in-memory caching
             services.AddMemoryCache();
+
+            // Validate JWT configuration
+            var jwtSection = Configuration.GetSection("Jwt");
+            ArgumentNullException.ThrowIfNull(jwtSection["Issuer"]);
+            ArgumentNullException.ThrowIfNull(jwtSection["Audience"]);
+            ArgumentNullException.ThrowIfNull(jwtSection["Key"]);
+
             // Configure JWT authentication
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -28,37 +36,28 @@ namespace ModernSchoolManagement
                     {
                         ValidateIssuer = true,
                         ValidateAudience = true,
-
                         ValidateIssuerSigningKey = true,
-                        ValidIssuer = Configuration["Jwt:Issuer"],
-                        ValidAudience = Configuration["Jwt:Audience"],
+                        ValidIssuer = jwtSection["Issuer"],
+                        ValidAudience = jwtSection["Audience"],
                         IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(
-                            System.Text.Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]!)),
+                            System.Text.Encoding.UTF8.GetBytes(jwtSection["Key"]!)),
                         ValidateLifetime = true,
                     };
-                    options.Events=new JwtBearerEvents{
+                    options.Events = new JwtBearerEvents
+                    {
                         OnAuthenticationFailed = context =>
                         {
+                            Console.Write("lne 50 ofstartup");
                             var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Startup>>();
                             logger.LogError("Authentication failed: {0}", context.Exception.Message);
                             return System.Threading.Tasks.Task.CompletedTask;
                         }
-                    //    ,
-                    //    OnTokenValidated = context =>
-                    //    {
-                    //        var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Startup>>();
-                    //        logger.LogInformation("Token validated for {0}", context.Principal?.Identity?.Name);
-                    //        return System.Threading.Tasks.Task.CompletedTask;
-                    //    }
                     };
                 });
 
-            //Add Services
+            // Add Services
             services.AddScoped<IAuthentication, Authentication.Authentication>();
 
-            services.AddScoped<IUserInterface, UserService>();
-            
-            
             // Use AddControllers with minimal JSON config for performance
             services.AddControllers()
                 .AddJsonOptions(options =>
@@ -70,14 +69,15 @@ namespace ModernSchoolManagement
             // Add logging
             services.AddLogging();
 
-            // Add CORS with a default policy for best performance
+            // Add CORS with a named policy for security
             services.AddCors(options =>
             {
-                options.AddDefaultPolicy(builder =>
+                options.AddPolicy("DefaultPolicy", builder =>
                 {
-                    builder.AllowAnyOrigin()
-                           .AllowAnyHeader()
-                           .AllowAnyMethod();
+                    builder.AllowAnyOrigin();
+                    //builder.WithOrigins("http://localhost:5216/") // Replace with your allowed origins
+                    //       .AllowAnyHeader()
+                    //       .AllowAnyMethod();
                 });
             });
 
@@ -107,34 +107,34 @@ namespace ModernSchoolManagement
                     }
                 });
             });
-   
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
         {
+            logger.LogInformation("Application starting up...");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ModernSchoolManagement v1"));
             }
-           //else
-           //  {
-           //     app.UseExceptionHandler("/Error");
-           //     app.UseHsts();
-           // }
+            else
+            {
+                app.UseExceptionHandler("/Error");
+                app.UseHsts();
+            }
 
             app.UseHttpsRedirection();
 
-            // Use CORS
-            app.UseCors(x=> x.AllowAnyOrigin());
+            // Use named CORS policy
+            app.UseCors("DefaultPolicy");
             app.UseRouting();
             app.UseStaticFiles();
 
-
             app.UseAuthentication();
             app.UseAuthorization();
-            
+
             // Use custom authentication middleware if needed
             app.UseMiddleware<Middleware.AuthenticationMiddleware>();
 
@@ -142,6 +142,8 @@ namespace ModernSchoolManagement
             {
                 endpoints.MapControllers();
             });
+
+            logger.LogInformation("Application started.");
         }
     }
 }
