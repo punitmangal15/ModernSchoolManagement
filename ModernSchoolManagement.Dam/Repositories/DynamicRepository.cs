@@ -28,5 +28,43 @@ namespace ModernSchoolManagement.Dam.Repositories
                 return  connection.QueryAsync<T>(query, commandType).Result;
             }
         }
+
+        public async Task<T> Get<T>(string sp,DynamicParameters? parameters, CommandType commandType)
+        {
+            using (IDbConnection connection = connectionFactory.GetConnection(connectionString))
+            {
+                return connection.QueryAsync<T>(sp, parameters, null, null, commandType).Result.FirstOrDefault();
+            }
+        }
+
+        public T Add<T>(string sp, DynamicParameters? parameters, CommandType commandType)
+        {
+            using (IDbConnection connection = connectionFactory.GetConnection(connectionString))
+            {
+                return connection.QueryAsync<T>(sp, parameters, null, null, commandType).Result.FirstOrDefault();
+            }
+        }
+        
+
+        public T Update<T>(string sp, DynamicParameters? parameters, CommandType commandType)
+        {
+            using (IDbConnection connection = connectionFactory.GetConnection(connectionString))
+            {
+                return connection.QueryAsync<T>(sp, parameters, null, null, commandType).Result.FirstOrDefault();
+            }
+        }
+
+        public T Delete<T>(string sp, DynamicParameters? parameters, CommandType commandType)
+        {
+            using (IDbConnection connection = connectionFactory.GetConnection(connectionString))
+            {
+                return connection.QueryAsync<T>(sp, parameters, null, null, commandType).Result.FirstOrDefault();
+            }
+        }
+
+        public T DeleteAll<T>(string sp, DynamicParameters? parameters, CommandType commandType)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

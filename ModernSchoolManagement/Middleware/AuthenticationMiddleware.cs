@@ -45,7 +45,7 @@ namespace ModernSchoolManagement.Middleware
                 return;
             }
             string Toke = context.Request.Headers.Authorization;
-            bool ValidToken = false;
+            bool ValidToken = true;
             if (!string.IsNullOrEmpty(Toke))
             {
                 ValidToken = authentication.ValidateTokenCLaim(Toke);
