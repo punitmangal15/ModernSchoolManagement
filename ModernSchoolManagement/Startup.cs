@@ -60,7 +60,8 @@ namespace ModernSchoolManagement
             services.AddScoped<IDynamicRepository, DynamicRepository>();
             services.AddScoped<IUserModel, UserService>();
             services.AddScoped<ISchoolModel, SchoolService>();
-            
+            services.AddScoped<IClassModel, ClassService>();
+
             //services.AddScoped<IUserInterface, UserService>();
 
 
