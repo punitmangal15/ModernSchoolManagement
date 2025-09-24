@@ -108,7 +108,9 @@ CREATE TABLE SC_Subject (
 );
 
 -- Table: SC_Notification
-
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[SC_Notification]') AND type in (N'U'))
+DROP TABLE [dbo].SC_Notification
+GO
 CREATE TABLE SC_Notification (
     NotificationId INT PRIMARY KEY IDENTITY(1,1),
     UserId bigint FOREIGN KEY REFERENCES SC_Users(UserId),
@@ -254,6 +256,7 @@ CREATE TABLE SC_Class_History (
     objectid INT,
 	name NVARCHAR(100),
     description NVARCHAR(MAX),
+	Attachment NVARCHAR(MAX),
     is_active BIT,
     C_CreatedBy VARCHAR(100),
     C_ModifiedBy VARCHAR(100),
@@ -281,13 +284,21 @@ GO
 CREATE TABLE SC_Users_History (
     id INT PRIMARY KEY IDENTITY(1,1),
     objectid INT,
-	name NVARCHAR(100),
-    description NVARCHAR(MAX),
-    is_active BIT,
+	RoleId INT FOREIGN KEY REFERENCES SC_Role(Id),
+	Username varchar(100) unique,
+    FirstName VARCHAR(100),
+    LastName VARCHAR(100),
+	Password_Hash	NVARCHAR(max),
+    EmailId NVARCHAR(100),
+    Phone NVARCHAR(15),
+	Password_Salt	NVARCHAR(max),
+    Is_Active BIT,
     C_CreatedBy VARCHAR(100),
-    C_ModifiedBy VARCHAR(100),
     C_CreatedDate DATETIME,
+    C_ModifiedBy VARCHAR(100),
     C_ModifiedDate DATETIME,
+	Is_TwoFactor_ON	bit,
+	AccessCode	int,
     ActionDate DATETIME,
     actiontypeid INT
 );
@@ -299,16 +310,18 @@ GO
 CREATE TABLE SC_SchoolInformation_History (
     id INT PRIMARY KEY IDENTITY(1,1),
     objectid INT,
-	name NVARCHAR(100),
-    description NVARCHAR(MAX),
-    is_active BIT,
+	Name NVARCHAR(100),
+    Address NVARCHAR(MAX),
+    contactno NVARCHAR(50),
+	Emailid nVARCHAR(100),    
     C_CreatedBy VARCHAR(100),
-    C_ModifiedBy VARCHAR(100),
     C_CreatedDate DATETIME,
+    C_ModifiedBy VARCHAR(100),
     C_ModifiedDate DATETIME,
     ActionDate DATETIME,
     actiontypeid INT
 );
+
 
 -- Table: SC_Notification_History
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[SC_Notification_History]') AND type in (N'U'))
@@ -317,13 +330,12 @@ GO
 CREATE TABLE SC_Notification_History (
     id INT PRIMARY KEY IDENTITY(1,1),
     objectid INT,
-	name NVARCHAR(100),
-    description NVARCHAR(MAX),
-    is_active BIT,
-    C_CreatedBy VARCHAR(100),
-    C_ModifiedBy VARCHAR(100),
-    C_CreatedDate DATETIME,
-    C_ModifiedDate DATETIME,
+	UserId bigint FOREIGN KEY REFERENCES SC_Users(UserId),
+    NotificationType VARCHAR(500),
+    Message NVARCHAR(MAX),
+    activitytypeid int,
+    Is_Read BIT,
+    notifytime datetime,
     ActionDate DATETIME,
     actiontypeid INT
 );
@@ -335,12 +347,13 @@ GO
 CREATE TABLE SC_Division_History (
     id INT PRIMARY KEY IDENTITY(1,1),
     objectid INT,
-	name NVARCHAR(100),
-    description NVARCHAR(MAX),
-    is_active BIT,
+	classid INT FOREIGN KEY REFERENCES SC_Class(Id),
+    Name VARCHAR(100),
+    Description NVARCHAR(MAX),
+    Is_Active BIT,
     C_CreatedBy VARCHAR(100),
-    C_ModifiedBy VARCHAR(100),
     C_CreatedDate DATETIME,
+    C_ModifiedBy VARCHAR(100),
     C_ModifiedDate DATETIME,
     ActionDate DATETIME,
     actiontypeid INT
@@ -353,12 +366,13 @@ GO
 CREATE TABLE SC_Subject_History (
     id INT PRIMARY KEY IDENTITY(1,1),
     objectid INT,
-	name NVARCHAR(100),
-    description NVARCHAR(MAX),
-    is_active BIT,
+	SubjectName NVARCHAR(500),
+    Description NVARCHAR(MAX),
+	Attachment NVARCHAR(MAX),
+    Is_Active BIT,
     C_CreatedBy VARCHAR(100),
-    C_ModifiedBy VARCHAR(100),
     C_CreatedDate DATETIME,
+    C_ModifiedBy VARCHAR(100),
     C_ModifiedDate DATETIME,
     ActionDate DATETIME,
     actiontypeid INT
@@ -371,17 +385,17 @@ GO
 CREATE TABLE SC_AcedemicYear_History (
     id INT PRIMARY KEY IDENTITY(1,1),
     objectid INT,
-	name NVARCHAR(100),
-    description NVARCHAR(MAX),
-    is_active BIT,
+	 AcademicName NVARCHAR(100),
+    StartDate DATE,
+    EndDate DATE,
+    Is_Active BIT,
     C_CreatedBy VARCHAR(100),
-    C_ModifiedBy VARCHAR(100),
     C_CreatedDate DATETIME,
+    C_ModifiedBy VARCHAR(100),
     C_ModifiedDate DATETIME,
     ActionDate DATETIME,
     actiontypeid INT
 );
-
 -- Table: SC_Course_History
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[SC_Course_History]') AND type in (N'U'))
 DROP TABLE [dbo].SC_Course_History
@@ -389,12 +403,13 @@ GO
 CREATE TABLE SC_Course_History (
     id INT PRIMARY KEY IDENTITY(1,1),
     objectid INT,
-	name NVARCHAR(100),
-    description NVARCHAR(MAX),
-    is_active BIT,
+	 CourseName VARCHAR(500),
+    Description NVARCHAR(MAX),
+    AcademicYearId INT FOREIGN KEY REFERENCES SC_AcademicYear(Id),
+    Is_Active BIT,
     C_CreatedBy VARCHAR(100),
-    C_ModifiedBy VARCHAR(100),
     C_CreatedDate DATETIME,
+    C_ModifiedBy VARCHAR(100),
     C_ModifiedDate DATETIME,
     ActionDate DATETIME,
     actiontypeid INT

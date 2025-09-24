@@ -65,8 +65,8 @@ namespace ModernSchoolManagement.Controllers
 
 
         // Example of adding another API endpoint
-        [HttpGet("today", Name = "GetToday")]
-        [Authorize]
+        [HttpGet("today", Name = "GetTodayWeather")]
+        [AllowAnonymous]
         public ActionResult<WeatherForecast> GetToday()
         {
           // IEnumerable<UserModel> users =  _userDetails.GetUserDetails();
