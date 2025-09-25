@@ -10,12 +10,12 @@ GO
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE OR ALTER PROCEDURE [dbo].[sp_UpdateClass]
+CREATE OR ALTER PROCEDURE [dbo].[sp_UpdateAcademicYear]
 	-- Add the parameters for the stored procedure here
-	@ClassId int,
-	@ClassName nvarchar(100),
-	@Description nvarchar(max),
-	@Attachment nvarchar(max),
+	@AcademicYearId int,
+	@AcademicYearName nvarchar(100),
+	@Startdate datetime,
+	@Enddate datetime,
 	@Is_Active bit,
 	@ModifiedBy nvarchar(100)
 AS
@@ -25,8 +25,8 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	UPDATE dbo.SC_Class 
-	SET Name=@ClassName,Description=@Description,Attachment=@Attachment,Is_Active=@Is_Active,C_ModifiedBy = @ModifiedBy,C_ModifiedDate = GETDATE()
-	WHERE Id=@ClassId;
+	UPDATE dbo.SC_AcademicYear 
+	SET AcademicName=@AcademicYearName,StartDate=@Startdate,EndDate=@Enddate,Is_Active=@Is_Active,C_ModifiedBy = @ModifiedBy,C_ModifiedDate = GETDATE()
+	WHERE Id=@AcademicYearId;
 	
 END

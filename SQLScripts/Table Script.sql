@@ -116,7 +116,7 @@ CREATE TABLE SC_Notification (
     UserId bigint FOREIGN KEY REFERENCES SC_Users(UserId),
     NotificationType VARCHAR(500),
     Message NVARCHAR(MAX),
-    objectid int,
+    object_id int,
     activitytypeid int,
     Is_Read BIT,
     notifytime datetime
@@ -333,6 +333,7 @@ CREATE TABLE SC_Notification_History (
 	UserId bigint FOREIGN KEY REFERENCES SC_Users(UserId),
     NotificationType VARCHAR(500),
     Message NVARCHAR(MAX),
+	object_id int,
     activitytypeid int,
     Is_Read BIT,
     notifytime datetime,
@@ -378,11 +379,11 @@ CREATE TABLE SC_Subject_History (
     actiontypeid INT
 );
 
--- Table: SC_AcedemicYear_History
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[SC_AcedemicYear_History]') AND type in (N'U'))
-DROP TABLE [dbo].SC_AcedemicYear_History
+-- Table: SC_AcademicYear_History
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[SC_AcademicYear_History]') AND type in (N'U'))
+DROP TABLE [dbo].SC_AcademicYear_History
 GO
-CREATE TABLE SC_AcedemicYear_History (
+CREATE TABLE SC_AcademicYear_History (
     id INT PRIMARY KEY IDENTITY(1,1),
     objectid INT,
 	 AcademicName NVARCHAR(100),
