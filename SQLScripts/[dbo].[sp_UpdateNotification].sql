@@ -10,14 +10,16 @@ GO
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE OR ALTER PROCEDURE [dbo].[sp_UpdateClass]
+CREATE OR ALTER PROCEDURE [dbo].[sp_UpdateNotification]
 	-- Add the parameters for the stored procedure here
-	@ClassId int,
-	@ClassName nvarchar(100),
-	@Description nvarchar(max),
-	@Attachment nvarchar(max),
-	@Is_Active bit,
-	@ModifiedBy nvarchar(100)
+	@NotificationId int,
+	@UserId int,
+	@NotificationType nvarchar(500),
+	@Message nvarchar(max),
+	@Object_Id int,
+	@ActivityTypeId int,
+	@Is_read bit,
+	@NotifyTime datetime
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -25,8 +27,8 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	UPDATE dbo.SC_Class 
-	SET Name=@ClassName,Description=@Description,Attachment=@Attachment,Is_Active=@Is_Active,C_ModifiedBy = @ModifiedBy,C_ModifiedDate = GETDATE()
-	WHERE Id=@ClassId;
+	UPDATE dbo.SC_Notification 
+	SET UserId=@UserId,NotificationType=@NotificationType,Message=@Message,object_id=@Object_Id,activitytypeid=@ActivityTypeId,Is_Read=@Is_read,notifytime=@NotifyTime
+	WHERE NotificationId=@NotificationId;
 	
 END

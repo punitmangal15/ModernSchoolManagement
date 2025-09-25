@@ -61,6 +61,9 @@ namespace ModernSchoolManagement
             services.AddScoped<IUserModel, UserService>();
             services.AddScoped<ISchoolModel, SchoolService>();
             services.AddScoped<IClassModel, ClassService>();
+            services.AddScoped<IDivisionModel, DivisionService>();
+            services.AddScoped<IAcademicYearModel, AcademicYearService>();
+            services.AddScoped<INotificationModel, NotificationService>();
 
             //services.AddScoped<IUserInterface, UserService>();
 
