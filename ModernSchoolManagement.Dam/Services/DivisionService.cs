@@ -22,7 +22,7 @@ namespace ModernSchoolManagement.Dam.Services
             }
             catch (Exception ex)
             {
-                return null;
+                throw new Exception("Failed to fetch division details.", ex);
             }
         }
 
@@ -37,7 +37,7 @@ namespace ModernSchoolManagement.Dam.Services
             }
             catch (Exception ex)
             {
-                return null;
+                throw new Exception("Failed to fetch division detail.", ex);
             }
 
         }
@@ -57,7 +57,7 @@ namespace ModernSchoolManagement.Dam.Services
             }
             catch (Exception ex)
             {
-                return null;
+                throw new Exception("Failed to add division.", ex);
             }
         }
         public async Task<DivisionModel> UpdateDivision(DivisionModel DivisionModel)
@@ -76,7 +76,7 @@ namespace ModernSchoolManagement.Dam.Services
             }
             catch (Exception ex)
             {
-                return null;
+                throw new Exception("Failed to update division.", ex);
             }
         }
         public async Task<DivisionModel> DeleteDivision(long Id)
@@ -90,7 +90,7 @@ namespace ModernSchoolManagement.Dam.Services
             }
             catch (Exception ex)
             {
-                return null;
+                throw new Exception("Failed to delete division.", ex);
             }
         }
 

@@ -22,7 +22,7 @@ namespace ModernSchoolManagement.Dam.Services
             }
             catch (Exception ex)
             {
-                return null;
+                throw new Exception("Failed to fetch class details.", ex);
             }
         }
 
@@ -37,7 +37,7 @@ namespace ModernSchoolManagement.Dam.Services
             }
             catch (Exception ex)
             {
-                return null;
+                throw new Exception("Failed to fetch class detail.", ex);
             }
 
         }
@@ -46,7 +46,6 @@ namespace ModernSchoolManagement.Dam.Services
         {
             string sp = "dbo.sp_AddClass";
             DynamicParameters dynamicParameters = new DynamicParameters();
-            //dynamicParameters.Add("@ClassId", ClassModel.Id);
             dynamicParameters.Add("@ClassName", ClassModel.Name);
             dynamicParameters.Add("@Description", ClassModel.Description);
             dynamicParameters.Add("@Attachment", ClassModel.Attachment);
@@ -58,7 +57,7 @@ namespace ModernSchoolManagement.Dam.Services
             }
             catch (Exception ex)
             {
-                return null;
+                throw new Exception("Failed to add class.", ex);
             }
         }
         public async Task<ClassModel> UpdateClass(ClassModel ClassModel)
@@ -77,7 +76,7 @@ namespace ModernSchoolManagement.Dam.Services
             }
             catch (Exception ex)
             {
-                return null;
+                throw new Exception("Failed to update class.", ex);
             }
         }
         public async Task<ClassModel> DeleteClass(long Id)
@@ -91,7 +90,7 @@ namespace ModernSchoolManagement.Dam.Services
             }
             catch (Exception ex)
             {
-                return null;
+                throw new Exception("Failed to delete class.", ex);
             }
         }
 
