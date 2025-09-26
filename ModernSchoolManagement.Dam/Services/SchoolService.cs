@@ -29,7 +29,7 @@ namespace ModernSchoolManagement.Dam.Services
             }
             catch (Exception ex)
             {
-                return null;
+                throw new Exception("Failed to fetch school details.", ex);
             }
         }
 
@@ -44,7 +44,7 @@ namespace ModernSchoolManagement.Dam.Services
             }
             catch (Exception ex)
             {
-                return null;
+                throw new Exception("Failed to fetch school detail.", ex);
             }
 
         }
@@ -53,7 +53,6 @@ namespace ModernSchoolManagement.Dam.Services
         {
             string sp = "sp_AddSchoolInformation";
             DynamicParameters dynamicParameters = new DynamicParameters();
-            //dynamicParameters.Add("@SchoolId", schoolModel.Id);
             dynamicParameters.Add("@SchoolName", schoolModel.Name);
             dynamicParameters.Add("@Address", schoolModel.Address);
             dynamicParameters.Add("@PhoneNumber", schoolModel.PhoneNumber);
@@ -65,14 +64,14 @@ namespace ModernSchoolManagement.Dam.Services
             }
             catch (Exception ex)
             {
-                return null;
+                throw new Exception("Failed to add school.", ex);
             }
         }
         public async Task<SchoolModel> UpdateSchool(SchoolModel schoolModel)
         {
             string sp = "sp_UpdateSchoolInformation";
             DynamicParameters dynamicParameters = new DynamicParameters();
-            dynamicParameters.Add("@SchoolId", schoolModel.Id);
+            dynamicParameters.Add("@SchoolId", schoolModel.SchoolId);
             dynamicParameters.Add("@SchoolName", schoolModel.Name);
             dynamicParameters.Add("@Address", schoolModel.Address);
             dynamicParameters.Add("@PhoneNumber", schoolModel.PhoneNumber);
@@ -84,7 +83,7 @@ namespace ModernSchoolManagement.Dam.Services
             }
             catch (Exception ex)
             {
-                return null;
+                throw new Exception("Failed to update school.", ex);
             }
         }
         public async Task<SchoolModel> DeleteSchool(long Id)
@@ -98,7 +97,7 @@ namespace ModernSchoolManagement.Dam.Services
             }
             catch (Exception ex)
             {
-                return null;
+                throw new Exception("Failed to delete school.", ex);
             }
         }
 

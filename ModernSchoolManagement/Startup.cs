@@ -4,6 +4,7 @@ using ModernSchoolManagement.Authentication;
 using Dapper;
 using ModernSchoolManagement.Dam.Repositories;
 using ModernSchoolManagement.Dam.Services;
+using ModernSchoolManagement.Dam.Models;
 
 namespace ModernSchoolManagement
 {
@@ -61,9 +62,11 @@ namespace ModernSchoolManagement
             services.AddScoped<IUserModel, UserService>();
             services.AddScoped<ISchoolModel, SchoolService>();
             services.AddScoped<IClassModel, ClassService>();
-            services.AddScoped<IDivisionModel, DivisionService>();
+            services.AddScoped<ISubjectModel, SubjectService>();
             services.AddScoped<IAcademicYearModel, AcademicYearService>();
             services.AddScoped<INotificationModel, NotificationService>();
+            services.AddScoped<ISubjectModel, SubjectService>();
+            services.AddScoped<ICourseModel, CourseService>();
 
             //services.AddScoped<IUserInterface, UserService>();
 

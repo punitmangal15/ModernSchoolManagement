@@ -22,7 +22,7 @@ namespace ModernSchoolManagement.Dam.Services
             }
             catch (Exception ex)
             {
-                return null;
+                throw new Exception("Failed to fetch academic year details.", ex);
             }
         }
 
@@ -37,7 +37,7 @@ namespace ModernSchoolManagement.Dam.Services
             }
             catch (Exception ex)
             {
-                return null;
+                throw new Exception("Failed to fetch academic year detail.", ex);
             }
 
         }
@@ -57,7 +57,7 @@ namespace ModernSchoolManagement.Dam.Services
             }
             catch (Exception ex)
             {
-                return null;
+                throw new Exception("Failed to Add academic year.", ex);
             }
         }
         public async Task<AcademicYearModel> UpdateAcademicYear(AcademicYearModel AcademicYearModel)
@@ -76,7 +76,7 @@ namespace ModernSchoolManagement.Dam.Services
             }
             catch (Exception ex)
             {
-                return null;
+                throw new Exception("Failed to update academic year.", ex);
             }
         }
         public async Task<AcademicYearModel> DeleteAcademicYear(long Id)
@@ -90,7 +90,7 @@ namespace ModernSchoolManagement.Dam.Services
             }
             catch (Exception ex)
             {
-                return null;
+                throw new Exception("Failed to delete academic year.", ex);
             }
         }
 

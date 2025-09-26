@@ -26,40 +26,98 @@ namespace ModernSchoolManagement.Controllers
         [AllowAnonymous]
         public async Task<IEnumerable<SchoolModel>> GetAllSchoolDetails()
         {
-            return await _schoolDetails.GetAllSchoolDetails();
-            //return Ok(users);
+            _logger.LogInformation("Fetching all school details.");
+            try
+            {
+                var schools = await _schoolDetails.GetAllSchoolDetails();
+                _logger.LogInformation("Fetched {Count} schools.", schools?.Count() ?? 0);
+                return schools;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while fetching all school details.");
+                throw;
+            }
         }
 
         [HttpGet(Name = "GetSchoolDetail")]
         [AllowAnonymous]
-        public Task<SchoolModel> GetSchoolDetail(long Id)
+        public async Task<SchoolModel> GetSchoolDetail(long Id)
         {
-            return _schoolDetails.GetSchoolDetail(Id);
-            //return Ok(users);
+            _logger.LogInformation("Fetching details for school with Id: {Id}", Id);
+            try
+            {
+                var school = await _schoolDetails.GetSchoolDetail(Id);
+                if (school == null)
+                {
+                    _logger.LogWarning("No school found with Id: {Id}", Id);
+                }
+                else
+                {
+                    _logger.LogInformation("Fetched details for school with Id: {Id}", Id);
+                }
+                return school;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while fetching school details for Id: {Id}", Id);
+                throw;
+            }
         }
 
         [HttpPost(Name = "AddSchool")]
         [AllowAnonymous]
-        public Task<SchoolModel> AddSchool(SchoolModel schoolModel)
+        public async Task<SchoolModel> AddSchool(SchoolModel schoolModel)
         {
-            return _schoolDetails.AddSchool(schoolModel);
-            //return Ok(users);
+            _logger.LogInformation("Adding new school: {@SchoolModel}", schoolModel);
+            try
+            {
+                var result = await _schoolDetails.AddSchool(schoolModel);
+                _logger.LogInformation("Added school with Id: {Id}", result?.SchoolId);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while adding school: {@SchoolModel}", schoolModel);
+                throw;
+            }
         }
 
         [HttpPost(Name = "UpdateSchool")]
         [AllowAnonymous]
-        public Task<SchoolModel> UpdateSchool(SchoolModel schoolModel)
+        public async Task<SchoolModel> UpdateSchool(SchoolModel schoolModel)
         {
-            return _schoolDetails.UpdateSchool(schoolModel);
-            //return Ok(users);
+            _logger.LogInformation("Updating school with Id: {Id}", schoolModel.SchoolId);
+            try
+            {
+                var result = await _schoolDetails.UpdateSchool(schoolModel);
+                _logger.LogInformation("Updated school with Id: {Id}", result?.SchoolId);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while updating school with Id: {Id}", schoolModel.SchoolId);
+                throw;
+            }
         }
 
         [HttpPost(Name = "DeleteSchool")]
         [AllowAnonymous]
-        public Task<SchoolModel> DeleteSchool(long Id)
+        public async Task<SchoolModel> DeleteSchool(long Id)
         {
-            return _schoolDetails.DeleteSchool(Id);
-            //return Ok(users);
+            _logger.LogInformation("Deleting school with Id: {Id}", Id);
+            try
+            {
+                var result = await _schoolDetails.DeleteSchool(Id);
+                _logger.LogInformation("Deleted school with Id: {Id}", result?.SchoolId);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while deleting school with Id: {Id}", Id);
+                throw;
+            }
         }
+
     }
 }

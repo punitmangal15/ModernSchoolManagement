@@ -22,7 +22,7 @@ namespace ModernSchoolManagement.Dam.Services
             }
             catch (Exception ex)
             {
-                return null;
+                throw new Exception("Failed to fetch notification details.", ex);
             }
         }
 
@@ -37,7 +37,7 @@ namespace ModernSchoolManagement.Dam.Services
             }
             catch (Exception ex)
             {
-                return null;
+                throw new Exception("Failed to fetch notification detail.", ex);
             }
 
         }
@@ -59,7 +59,7 @@ namespace ModernSchoolManagement.Dam.Services
             }
             catch (Exception ex)
             {
-                return null;
+                throw new Exception("Failed to add notification.", ex);
             }
         }
         public async Task<NotificationModel> UpdateNotification(NotificationModel NotificationModel)
@@ -80,7 +80,7 @@ namespace ModernSchoolManagement.Dam.Services
             }
             catch (Exception ex)
             {
-                return null;
+                throw new Exception("Failed to update notification.", ex);
             }
         }
         public async Task<NotificationModel> DeleteNotification(long Id)
@@ -94,7 +94,7 @@ namespace ModernSchoolManagement.Dam.Services
             }
             catch (Exception ex)
             {
-                return null;
+                throw new Exception("Failed to delete notification.", ex);
             }
         }
 

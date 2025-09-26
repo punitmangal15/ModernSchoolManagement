@@ -26,7 +26,7 @@ namespace ModernSchoolManagement.Dam.Services
                 return await dynamicRepository.GetAll<UserModel>(query,CommandType.Text);
             }
             catch (Exception ex) {
-                return null;
+                throw new Exception("Failed to fetch user detail.", ex);
             }
         }
     }

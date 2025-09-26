@@ -26,40 +26,98 @@ namespace ModernNotificationManagement.Controllers
         [AllowAnonymous]
         public async Task<IEnumerable<NotificationModel>> GetAllNotificationDetails()
         {
-            return await _NotificationDetails.GetAllNotificationDetails();
-            //return Ok(users);
+            _logger.LogInformation("Fetching all notification details.");
+            try
+            {
+                var notifications = await _NotificationDetails.GetAllNotificationDetails();
+                _logger.LogInformation("Fetched {Count} notifications.", notifications?.Count() ?? 0);
+                return notifications;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error fetching all notification details.");
+                throw;
+            }
         }
 
         [HttpGet(Name = "GetNotificationDetail")]
         [AllowAnonymous]
-        public Task<NotificationModel> GetNotificationDetail(long Id)
+        public async Task<NotificationModel> GetNotificationDetail(long Id)
         {
-            return _NotificationDetails.GetNotificationDetail(Id);
-            //return Ok(users);
+            _logger.LogInformation("Fetching notification detail for Id: {Id}", Id);
+            try
+            {
+                var notification = await _NotificationDetails.GetNotificationDetail(Id);
+                if (notification == null)
+                {
+                    _logger.LogWarning("Notification with Id: {Id} not found.", Id);
+                }
+                else
+                {
+                    _logger.LogInformation("Fetched notification detail for Id: {Id}", Id);
+                }
+                return notification;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error fetching notification detail for Id: {Id}", Id);
+                throw;
+            }
         }
 
         [HttpPost(Name = "AddNotification")]
         [AllowAnonymous]
-        public Task<NotificationModel> AddNotification(NotificationModel NotificationModel)
+        public async Task<NotificationModel> AddNotification(NotificationModel NotificationModel)
         {
-            return _NotificationDetails.AddNotification(NotificationModel);
-            //return Ok(users);
+            _logger.LogInformation("Adding new notification for UserId: {UserId}, Type: {Type}", NotificationModel.UserId, NotificationModel.NotificationType);
+            try
+            {
+                var result = await _NotificationDetails.AddNotification(NotificationModel);
+                _logger.LogInformation("Added notification with Id: {Id}", result.NotificationId);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error adding notification for UserId: {UserId}", NotificationModel.UserId);
+                throw;
+            }
         }
 
         [HttpPost(Name = "UpdateNotification")]
         [AllowAnonymous]
-        public Task<NotificationModel> UpdateNotification(NotificationModel NotificationModel)
+        public async Task<NotificationModel> UpdateNotification(NotificationModel NotificationModel)
         {
-            return _NotificationDetails.UpdateNotification(NotificationModel);
-            //return Ok(users);
+            _logger.LogInformation("Updating notification with Id: {Id}", NotificationModel.NotificationId);
+            try
+            {
+                var result = await _NotificationDetails.UpdateNotification(NotificationModel);
+                _logger.LogInformation("Updated notification with Id: {Id}", result.NotificationId);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating notification with Id: {Id}", NotificationModel.NotificationId);
+                throw;
+            }
         }
 
         [HttpPost(Name = "DeleteNotification")]
         [AllowAnonymous]
-        public Task<NotificationModel> DeleteNotification(long Id)
+        public async Task<NotificationModel> DeleteNotification(long Id)
         {
-            return _NotificationDetails.DeleteNotification(Id);
-            //return Ok(users);
+            _logger.LogInformation("Deleting notification with Id: {Id}", Id);
+            try
+            {
+                var result = await _NotificationDetails.DeleteNotification(Id);
+                _logger.LogInformation("Deleted notification with Id: {Id}", Id);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error deleting notification with Id: {Id}", Id);
+                throw;
+            }
         }
+
     }
 }
